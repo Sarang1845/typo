@@ -63,4 +63,18 @@ describe Admin::CategoriesController do
     assert_raise(ActiveRecord::RecordNotFound) { Category.find(test_id) }
   end
   
+  describe "test_new" do
+    before(:each) do
+      get :new
+    end
+    
+    it "checks if a category was created properly" do
+     post :new, :category => {:name => "Iron Man"}
+      assigns(:category).should_not be_nil
+      assert assigns(:category).valid?
+      assert_not_nil Category.find_by_name("Iron Man")
+      assigns(:categories).should_not be_nil
+    end
+  end
+  
 end

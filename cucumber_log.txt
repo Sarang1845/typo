@@ -1,0 +1,71 @@
+Using the default profile...
+Feature: Create Blog
+  As an author
+  In order to gift my thoughts to the world
+  I want to create a blog
+
+  Scenario: Create blog page shown      # features/create_blog.feature:6
+    Given I am on the home page         # features/step_definitions/web_steps.rb:68
+    Then I should see "Welcome"         # features/step_definitions/web_steps.rb:129
+    And I should see "My Shiny Weblog!" # features/step_definitions/web_steps.rb:129
+
+  Scenario: Create blog page not shown when blog created # features/create_blog.feature:11
+    Given the blog is set up                             # features/step_definitions/web_steps.rb:34
+    When I am on the home page                           # features/step_definitions/web_steps.rb:68
+    Then I should not see "My Shiny Weblog!"             # features/step_definitions/web_steps.rb:147
+    And I should see "Teh Blag"                          # features/step_definitions/web_steps.rb:129
+
+Feature: Create and edit categories
+  As a blog administrator 
+  In order to add movies to my Marvel Movies blog 
+  I want to be able to create and edit categories
+
+  Background:                            # features/new_categories.feature:7
+    Given the blog is set up             # features/step_definitions/web_steps.rb:34
+    And I am logged into the admin panel # features/step_definitions/web_steps.rb:46
+
+  Scenario: Going into categories page   # features/new_categories.feature:12
+    When I follow "Categories"           # features/step_definitions/web_steps.rb:80
+    Then I should see "Categories"       # features/step_definitions/web_steps.rb:129
+
+  Scenario: Going into categories page and creating a new category # features/new_categories.feature:16
+    When I follow "Categories"                                     # features/step_definitions/web_steps.rb:80
+    And I fill in "Name" with "Iron Man 1"                         # features/step_definitions/web_steps.rb:84
+    And I fill in "Description" with "Best Movie of all Time"      # features/step_definitions/web_steps.rb:84
+    And I press "Save"                                             # features/step_definitions/web_steps.rb:76
+    Then I should see "Iron Man 1"                                 # features/step_definitions/web_steps.rb:129
+    And I should see "Best Movie of all Time"                      # features/step_definitions/web_steps.rb:129
+
+  Scenario: Going into categories page, creating a new category and editing it # features/new_categories.feature:24
+    When I follow "Categories"                                                 # features/step_definitions/web_steps.rb:80
+    And I fill in "Name" with "Iron Man"                                       # features/step_definitions/web_steps.rb:84
+    And I press "Save"                                                         # features/step_definitions/web_steps.rb:76
+    And I follow "Iron Man"                                                    # features/step_definitions/web_steps.rb:80
+    And I fill in "Description" with "It has three movies"                     # features/step_definitions/web_steps.rb:84
+    And I press "Save"                                                         # features/step_definitions/web_steps.rb:76
+    Then I should see "Iron Man"                                               # features/step_definitions/web_steps.rb:129
+    And I should see "It has three movies"                                     # features/step_definitions/web_steps.rb:129
+
+Feature: Write Articles
+  As a blog administrator
+  In order to share my thoughts with the world
+  I want to be able to add articles to my blog
+
+  Background:                            # features/write_article.feature:6
+    Given the blog is set up             # features/step_definitions/web_steps.rb:34
+    And I am logged into the admin panel # features/step_definitions/web_steps.rb:46
+
+  Scenario: Successfully write articles                                  # features/write_article.feature:10
+    Given I am on the new article page                                   # features/step_definitions/web_steps.rb:68
+    When I fill in "article_title" with "Foobar"                         # features/step_definitions/web_steps.rb:84
+    And I fill in "article__body_and_extended_editor" with "Lorem Ipsum" # features/step_definitions/web_steps.rb:84
+    And I press "Publish"                                                # features/step_definitions/web_steps.rb:76
+    Then I should be on the admin content page                           # features/step_definitions/web_steps.rb:254
+    When I go to the home page                                           # features/step_definitions/web_steps.rb:72
+    Then I should see "Foobar"                                           # features/step_definitions/web_steps.rb:129
+    When I follow "Foobar"                                               # features/step_definitions/web_steps.rb:80
+    Then I should see "Lorem Ipsum"                                      # features/step_definitions/web_steps.rb:129
+
+6 scenarios (6 passed)
+40 steps (40 passed)
+0m4.073s
